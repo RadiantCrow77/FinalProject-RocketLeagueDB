@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    username: rocketleagueserver
+    password: rocketleagueserver
+    url: jdbc:mysql://localhost:3306/rocketleagueserver #connects to mySQL
+    
+    # add JPA properties later
