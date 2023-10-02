@@ -12,11 +12,10 @@ import jakarta.persistence.ManyToMany;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import pet.store.entity.PetStore;
 
 @Entity
 @Data
-public class RanksEarned {
+public class RankEarned {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long rankId; // PK

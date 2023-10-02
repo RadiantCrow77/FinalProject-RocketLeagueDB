@@ -4,4 +4,13 @@ spring:
     password: rocketleagueserver
     url: jdbc:mysql://localhost:3306/rocketleagueserver #connects to mySQL
     
-    # add JPA properties later
+    # JPA properties
+  jpa:
+    hibernate: #takes entities and converts them to SQL statements
+      ddl-auto: create # CHANGE TO UPDATE AFTER ENTITIES ARE CORRECT
+    show-sql: true
+    defer-datasource-initialization: true #when spring boot is inserting into tables, spring boot can sometimes insert data before tables are created, this tells spring to wait
+    
+  sql:
+    init:
+      mode: always

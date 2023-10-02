@@ -12,16 +12,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import pet.store.entity.Customer;
-import pet.store.entity.Employee;
 
 @Entity
 @Data
-public class Cars {
+public class Car {
 // Instance vars based on ERD
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +37,6 @@ public class Cars {
 	private Player player; // points back to player as a JPA requirement
 	// - end player - car relationship --
 	
-	// Many-to-Many Relationship with ranks earned => set
-	// Not sure if correct???? vvvv
-	private Set<RankEarned> ranksEarned = new HashSet<>();
 	
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
@@ -50,8 +44,7 @@ public class Cars {
 	// Joins Table car_rank with car_id
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "car_rank", joinColumns = @JoinColumn(name = "car_id"), inverseJoinColumns = @JoinColumn(name = "rank_id"))
-	
-
+    private Set<RankEarned> ranksEarned = new HashSet<>();
 	// for reference:
 //	private Set<Customer> customers = new HashSet<>();
 	
@@ -60,5 +53,9 @@ public class Cars {
 //	@ToString.Exclude
 //	@OneToMany(mappedBy = "petStore", cascade = CascadeType.ALL, orphanRemoval = true)
 //	private Set<Employee> employees = new HashSet<>();
+	
+//	@ManyToMany(cascade = CascadeType.PERSIST)
+//	@JoinTable(name = "pet_store_customer", joinColumns = @JoinColumn(name = "pet_store_id"), inverseJoinColumns = @JoinColumn(name = "customer_id"))
+//	private Set<Customer> customers = new HashSet<>();
 	
 }
