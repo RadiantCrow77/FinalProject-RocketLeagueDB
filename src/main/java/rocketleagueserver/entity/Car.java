@@ -45,6 +45,7 @@ public class Car {
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "car_rank", joinColumns = @JoinColumn(name = "car_id"), inverseJoinColumns = @JoinColumn(name = "rank_id"))
     private Set<RankEarned> ranksEarned = new HashSet<>();
+	
 	// for reference:
 //	private Set<Customer> customers = new HashSet<>();
 	

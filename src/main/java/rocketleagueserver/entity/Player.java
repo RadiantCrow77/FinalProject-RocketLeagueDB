@@ -30,13 +30,13 @@ public class Player {
 	// set relationship w/cars, 1-many
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true) // not sure if PERSIST or ALL cascade type
 	private Set<Car> cars = new HashSet<>();
 	
-	// set relationship w/ranks_earned
+	// set relationship w/ranks_earned, 1-many
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true) // same
 	private Set<RankEarned> ranksEarned = new HashSet<>();
 	
 	// for reference
