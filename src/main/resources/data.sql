@@ -1,0 +1,14 @@
+INSERT INTO car (car) VALUES ('Masamune');
+INSERT INTO car (car) VALUES ('Octane');
+INSERT INTO car (car) VALUES ('Scarab');
+INSERT INTO car (car) VALUES ('Takumi');
+INSERT INTO car (car) VALUES ('Aftershock');
+INSERT INTO car (car) VALUES ('Ripper');
+INSERT INTO car (car) VALUES ('Zippy');
+INSERT INTO car (car) VALUES ('Dominus');
+INSERT INTO car (car) VALUES ('Peregrine GT');
+INSERT INTO car (car) VALUES ('Road Hog');
+INSERT INTO car (car) VALUES ('Breakout');
+INSERT INTO car (car) VALUES ('Aston Martin');
+INSERT INTO car (car) VALUES ('Dingo');
+INSERT INTO car (car) VALUES ('Van');

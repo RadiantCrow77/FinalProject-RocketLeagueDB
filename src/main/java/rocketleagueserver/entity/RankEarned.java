@@ -24,10 +24,11 @@ public class RankEarned {
 
 // ranks???
 // should this just be a singular String, rankNames? if so, fix ERD
-	private String bronze;
-	private String silver;
-	private String gold;
-	private String platinum;
+	// enums -- ranks never changed
+	private String BRONZE;
+	private String SILVER;
+	private String GOLD;
+	private String PLATINUM;
 	
 // Relation between ranksEarned and players
 // Use Join Column a.k.a. FK = playerId to build Entity relationship (1-Many; from the perspective of Players)
@@ -43,5 +44,4 @@ public class RankEarned {
 	@ToString.Exclude
 	@ManyToMany(mappedBy = "ranksEarned", cascade = CascadeType.PERSIST)
 	 private Set<Car> cars = new HashSet<>();
-	
 }
