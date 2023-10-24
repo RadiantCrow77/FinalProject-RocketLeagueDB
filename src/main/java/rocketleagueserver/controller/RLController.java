@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -37,7 +38,8 @@ public class RLController {
 
 	}
 
-	// ALL Players, similar to petStore
+	// ALL Players,
+	// similar to petStore
 	// READ / GET
 	@GetMapping("/player")
 	public List<PlayerData> retrieveAllPlayers() {
@@ -51,7 +53,17 @@ public class RLController {
 	@GetMapping("/player/{playerId}")
 	public PlayerData retrievePlayerById(@PathVariable Long playerId) {
 		log.info("Retrieving player with ID: {}", playerId);
-		PlayerData player =  playerService.retrievePlayerById(playerId);
+		PlayerData player = playerService.retrievePlayerById(playerId);
 		return player;
+	}
+
+	// Player
+	// UPDATE / POST by Id
+	@PutMapping("/player/{playerId}")
+	public PlayerData updatePlayer(@PathVariable Long playerId, 
+			@RequestBody PlayerData playerData) {
+		playerData.setPlayerId(playerId);
+		log.info("Updating Player {}", playerId);
+		return playerService.savePlayer(playerData);
 	}
 }
