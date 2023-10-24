@@ -1,5 +1,7 @@
 package rocketleagueserver.service;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -62,5 +64,30 @@ public class PlayerService {
 	return playerDao.findById(playerId)
 			.orElseThrow(() -> new NoSuchElementException(
 			"Player with ID = " + playerId + "was not found.")); 
+	}
+
+// retreive ALL players
+	@Transactional(readOnly = true)
+	public List<PlayerData> retrieveAllPlayers() {
+		List<Player> players = playerDao.findAll();
+		
+		// turn list of player objects into list of player data objects
+		List<PlayerData> response = new LinkedList<>();
+		
+		for (Player player : players) {
+			response.add(new PlayerData(player));
+		}
+		
+		return response;
+	}
+
+// retrieve ONE player by ID
+	@Transactional(readOnly = true)
+	public PlayerData retrievePlayerById(Long playerId) {
+		Player player =  playerDao.findById(playerId).orElseThrow(
+				() -> new NoSuchElementException("The Player with Id = " + playerId + " was not found. "));
+		
+		PlayerData pd = new PlayerData(player);
+		return pd;
 	}
 }
