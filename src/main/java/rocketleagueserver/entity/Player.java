@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +22,10 @@ public class Player {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long playerId; // PK
 
+	// should be no duplicates on names, this is handled in the service **Might need to change this later
+	@Column(unique = true)
 	private String playerName;
+	
 	private Long hoursPlayed;
 	private String playerBanner;
 	private String playerBorder;
@@ -38,19 +42,6 @@ public class Player {
 	@ToString.Exclude
 	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true) // same
 	private Set<RankEarned> ranksEarned = new HashSet<>();
-	
-	// for reference
-	// set customer annotations and relationship
-//			@ManyToMany(cascade = CascadeType.PERSIST)
-//			@JoinTable(name = "pet_store_customer", joinColumns = @JoinColumn(name = "pet_store_id"), inverseJoinColumns = @JoinColumn(name = "customer_id"))
-//			private Set<Customer> customers = new HashSet<>();
-//			
-//			//  set employee annotations and relationship
-//			@EqualsAndHashCode.Exclude
-//			@ToString.Exclude
-	// petStore = player
-	// Employee = rankEarned
-//			@OneToMany(mappedBy = "petStore", cascade = CascadeType.ALL, orphanRemoval = true)
-//			private Set<Employee> employees = new HashSet<>();
+
 }
 

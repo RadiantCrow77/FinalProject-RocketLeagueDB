@@ -4,8 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +27,9 @@ public class PlayerService {
 	@Transactional(readOnly = false)
 	public PlayerData savePlayer(PlayerData playerData) {
 		Long playerId = playerData.getPlayerId();
-		Player player = findOrCreatePlayer(playerId);
+		Player player = findOrCreatePlayer(playerId, 
+				playerData.getPlayerName());
+		
 		
 		// set all instances variables in player obj to what got passed in JSON data (destination, source)
 		setFieldsInPlayer(player, playerData);
@@ -48,10 +52,19 @@ public class PlayerService {
 
 
 	//helper method for savePlayer
-	private Player findOrCreatePlayer(Long playerId) {
+	// recall that player names need to be unique
+	private Player findOrCreatePlayer(Long playerId, 
+			String playerName) {
 		Player player;
 
 		if (Objects.isNull(playerId)) { 
+			Optional<Player> opPlayerNm =
+					playerDao.findByPlayerName(playerName);
+			
+			if(opPlayerNm.isPresent()) {
+				throw new DuplicateKeyException("Player with Name: " + playerName + " already exists.");
+			}
+			
 			player = new Player(); 
 		} else {
 			player = findPlayerById(playerId);
