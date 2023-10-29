@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import rocketleagueserver.controller.model.PlayerData;
+import rocketleagueserver.entity.Car;
 import rocketleagueserver.service.PlayerService;
 
 @RestController
@@ -65,5 +66,16 @@ public class RLController {
 		playerData.setPlayerId(playerId);
 		log.info("Updating Player {}", playerId);
 		return playerService.savePlayer(playerData);
+	}
+	
+	// unsure from here down:
+	// Car
+	// CREATE / POST
+	@PostMapping("/player/{player_id}/car")
+	public PlayerData addCar(
+			@PathVariable Long playerId,
+			@RequestBody Car car){
+		log.info("Added a new car: {}", car);
+		return playerService.saveCar(playerId, car);
 	}
 }
