@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import rocketleagueserver.controller.model.PlayerData;
 import rocketleagueserver.controller.model.PlayerData.CarData;
+import rocketleagueserver.dao.CarDao;
 import rocketleagueserver.dao.PlayerDao;
 import rocketleagueserver.entity.Car;
 import rocketleagueserver.entity.Player;
@@ -23,6 +24,11 @@ public class PlayerService {
 	// Note: need a Dao for each Entity
 	@Autowired
 	private PlayerDao playerDao;
+	
+	@Autowired
+	private CarDao carDao;
+	
+	// RANK DAO HERE
 
 	// creates a player
 	@Transactional(readOnly = false)
@@ -125,12 +131,24 @@ public class PlayerService {
 	}
 
 	private void copyCarFields(Car car, CarData playerCar) {
-		// TODO Auto-generated method stub
+		// fields from car entity
+//		private Long carId; // PK
+//		private String carBodyName;
+//		private String carColor;
+//		private String carPaintFinish;
+		
+		car.setCarId(playerCar.getCarId());
+		car.setCarBodyName(playerCar.getCarBodyName());
+		car.setCarColor(playerCar.getCarColor());
+		car.setCarPaintFinish(playerCar.getCarPaintFinish());
 
 	}
 
 	private Car findOrCreateCar(Long playerId, Long carId) {
-		// TODO Auto-generated method stub
-		return null;
+		if (Objects.isNull(carId)) {
+			return new Car();
+		} else {
+			return findCarById(playerId, carId); // FIGURE THIS OUT NEXT, LOOKING AT CUSTOMER AS A REF***
+		}
 	}
 }
