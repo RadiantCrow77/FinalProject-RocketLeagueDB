@@ -151,4 +151,16 @@ public class PlayerService {
 			return findCarById(playerId, carId); // FIGURE THIS OUT NEXT, LOOKING AT CUSTOMER AS A REF***
 		}
 	}
+
+	private Car findCarById(Long playerId, Long carId) {
+		Car car = carDao.findById(carId).orElseThrow(
+				() -> new NoSuchElementException("The car with Id = " + carId + " was not found."));
+		
+		// if car with Id is not found for that specific player, throw exception
+		if(car.getPlayer().getPlayerId() != playerId) {
+			throw new IllegalStateException(
+					"Car with ID = " + carId + "does not belong to player containing ID = " + playerId);
+		}
+		return car;
+	}
 }
