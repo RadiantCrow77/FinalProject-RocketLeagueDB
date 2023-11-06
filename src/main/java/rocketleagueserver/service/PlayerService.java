@@ -108,13 +108,13 @@ public class PlayerService {
 // just need to make car DAO vvv 
 // create a new car for a specific player ID
 	// this is like saveEmployee in PetStoreService
-	public CarData saveCar(Long playerId, CarData playerCar) {
+	public CarData saveCar(Long playerId, CarData carData) {
 		Player player = findPlayerById(playerId);
 
-		Long carId = playerCar.getCarId();
+		Long carId = carData.getCarId();
 		Car car = findOrCreateCar(playerId, carId);
 
-		copyCarFields(car, playerCar);
+		copyCarFields(car, carData);
 
 		// set player in car
 		car.setPlayer(player);

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import rocketleagueserver.controller.model.PlayerData;
+import rocketleagueserver.controller.model.PlayerData.CarData;
 import rocketleagueserver.entity.Car;
 import rocketleagueserver.service.PlayerService;
 
@@ -71,12 +72,18 @@ public class RLController {
 	// unsure from here down:
 	// Car
 	// CREATE / POST
-	@PostMapping("/player/{player_id}/car")
-	public PlayerData addCar(
+	@PostMapping("/player/{playerId}/car")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public CarData addCar(
 			@PathVariable Long playerId,
-			@RequestBody Car car){
-		log.info("Added a new car: {}", car);
+			@RequestBody CarData carData){ // chang Car to PlayerCar? compare employee and player 
+		log.info("Added a new car: {}", carData);
 		// Fix this vvv*****
-		return playerService.saveCar(playerId, car);
+		return playerService.saveCar(playerId, carData);
 	}
+	
+	// Car
+	// All cars for ONE player
+	// READ / GET by player ID
+	
 }
