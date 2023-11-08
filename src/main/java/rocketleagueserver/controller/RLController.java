@@ -85,5 +85,11 @@ public class RLController {
 	// Car
 	// All cars for ONE player
 	// READ / GET by player ID
-	
+	// WILL NEED TO LOGIC THROUGH TIHS
+	@GetMapping("/player/{playerId}/car")
+	public List<CarData> retrieveAllCars(){
+		log.info("Retrieving all cars in the specified player's garage.");
+		List<CarData> cars = playerService.retrieveAllCars();
+		return cars;
+	}
 }

@@ -163,4 +163,17 @@ public class PlayerService {
 		}
 		return car;
 	}
+
+	// Retrieve ALL cars for a certain player
+	@Transactional(readOnly = true)
+	public List<CarData> retrieveAllCars() {
+		List<Car> cars = carDao.findAll();
+		
+		List<CarData> response = new LinkedList<>();
+		
+		for(Car car: cars) {
+			response.add(new CarData(car));
+		}
+		return response;
+	}
 }
