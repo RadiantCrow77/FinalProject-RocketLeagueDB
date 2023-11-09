@@ -41,6 +41,7 @@ public class Player {
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true) // same
+	@Column(unique = true) // make sure no duplicate ranks
 	private Set<RankEarned> ranksEarned = new HashSet<>();
 
 }

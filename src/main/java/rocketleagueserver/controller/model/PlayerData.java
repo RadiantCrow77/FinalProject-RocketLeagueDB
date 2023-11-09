@@ -74,18 +74,20 @@ public class PlayerData {
 	public static class RankEarnedData{
 		private Long rankId; 
 		// ****took final off to fix NoArgsConstruct err
-			private String BRONZE;
-			private String SILVER;
-			private String GOLD;
-			private String PLATINUM;
+			private String rankLevel;
+//			BRONZE;
+//			private String SILVER;
+//			private String GOLD;
+//			private String PLATINUM;
 			
 			// Rank constructor and getters
 			public RankEarnedData(RankEarned rankEarned) {
 				rankId = rankEarned.getRankId();
-				BRONZE = rankEarned.getBRONZE();
-				SILVER = rankEarned.getSILVER();
-				GOLD = rankEarned.getGOLD();
-				PLATINUM = rankEarned.getPLATINUM();
+				rankLevel = rankEarned.getRankLevel();
+//				BRONZE = rankEarned.getBRONZE();
+//				SILVER = rankEarned.getSILVER();
+//				GOLD = rankEarned.getGOLD();
+//				PLATINUM = rankEarned.getPLATINUM();
 			}
 	}
 

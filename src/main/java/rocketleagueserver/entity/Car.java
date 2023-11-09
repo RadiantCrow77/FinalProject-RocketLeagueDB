@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -44,6 +45,7 @@ public class Car {
 	// Joins Table car_rank with car_id
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "car_rank", joinColumns = @JoinColumn(name = "car_id"), inverseJoinColumns = @JoinColumn(name = "rank_id"))
+	@Column(unique = true) // make sure no duplicate ranks
     private Set<RankEarned> ranksEarned = new HashSet<>();
 	
 	// for reference:

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import rocketleagueserver.controller.model.PlayerData;
 import rocketleagueserver.controller.model.PlayerData.CarData;
+import rocketleagueserver.controller.model.PlayerData.RankEarnedData;
 import rocketleagueserver.entity.Car;
 import rocketleagueserver.service.PlayerService;
 
@@ -71,7 +72,6 @@ public class RLController {
 		return playerService.savePlayer(playerData);
 	}
 	
-	// unsure from here down:
 	// Car
 	// CREATE / POST
 	@PostMapping("/player/{playerId}/car")
@@ -130,6 +130,17 @@ public class RLController {
 		playerService.deleteCarById(carId);
 		
 		return Map.of("message", "Deleted car with ID = "+carId+ " succesfully.");
+	}
+	
+	// Ranks
+	// Add ONE rank to ONE player
+	@PostMapping("/player/{playerId}/rankEarned")
+	public RankEarnedData addRank(
+			@PathVariable Long playerId,
+			@RequestBody RankEarnedData rankData) {
+		log.info("Added a new rank: {} to specified player", rankData);
+		
+		return playerService.saveRank(playerId, rankData);
 	}
 	
 }

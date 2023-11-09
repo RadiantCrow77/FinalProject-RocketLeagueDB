@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,10 +26,8 @@ public class RankEarned {
 // ranks???
 // should this just be a singular String, rankNames? if so, fix ERD
 	// enums -- ranks never changed
-	private String BRONZE;
-	private String SILVER;
-	private String GOLD;
-	private String PLATINUM;
+	@Column(unique = true)
+	private String rankLevel;
 	
 // Relation between ranksEarned and players
 // Use Join Column a.k.a. FK = playerId to build Entity relationship (1-Many; from the perspective of Players)
