@@ -24,10 +24,10 @@ public class PlayerService {
 	// Note: need a Dao for each Entity
 	@Autowired
 	private PlayerDao playerDao;
-	
+
 	@Autowired
 	private CarDao carDao;
-	
+
 	// RANK DAO HERE
 
 	// creates a player
@@ -105,7 +105,6 @@ public class PlayerService {
 		return pd;
 	}
 
-// just need to make car DAO vvv 
 // create a new car for a specific player ID
 	// this is like saveEmployee in PetStoreService
 	public CarData saveCar(Long playerId, CarData carData) {
@@ -136,7 +135,7 @@ public class PlayerService {
 //		private String carBodyName;
 //		private String carColor;
 //		private String carPaintFinish;
-		
+
 		car.setCarId(playerCar.getCarId());
 		car.setCarBodyName(playerCar.getCarBodyName());
 		car.setCarColor(playerCar.getCarColor());
@@ -153,13 +152,13 @@ public class PlayerService {
 	}
 
 	private Car findCarById(Long playerId, Long carId) {
-		Car car = carDao.findById(carId).orElseThrow(
-				() -> new NoSuchElementException("The car with Id = " + carId + " was not found."));
-		
+		Car car = carDao.findById(carId)
+				.orElseThrow(() -> new NoSuchElementException("The car with Id = " + carId + " was not found."));
+
 		// if car with Id is not found for that specific player, throw exception
-		if(car.getPlayer().getPlayerId() != playerId) {
+		if (car.getPlayer().getPlayerId() != playerId) {
 			throw new IllegalStateException(
-					"Car with ID = " + carId + "does not belong to player containing ID = " + playerId);
+					"Car with ID = " + carId + " does not belong to player containing ID = " + playerId);
 		}
 		return car;
 	}
@@ -168,12 +167,32 @@ public class PlayerService {
 	@Transactional(readOnly = true)
 	public List<CarData> retrieveAllCars() {
 		List<Car> cars = carDao.findAll();
-		
+
 		List<CarData> response = new LinkedList<>();
-		
-		for(Car car: cars) {
+
+		for (Car car : cars) {
 			response.add(new CarData(car));
 		}
 		return response;
 	}
+
+	// Get ONE car by ID for a specific player
+	@Transactional(readOnly = true)
+	public CarData retrieveCarById(Long carId) {
+		Car car = carDao.findById(carId)
+				.orElseThrow(() -> new NoSuchElementException("The Car with Id = " + carId + " was not found. "));
+
+		CarData cd = new CarData(car);
+		return cd;
+	}
+
+	// Delete ONE car by ID for a specific player
+	@Transactional(readOnly = false)
+	public void deleteCarById(Long carId) {
+		Car car = carDao.findById(carId)
+				.orElseThrow(() -> new NoSuchElementException("The car with Id = " + carId + " was not found."));
+
+		carDao.delete(car);
+	}
+
 }

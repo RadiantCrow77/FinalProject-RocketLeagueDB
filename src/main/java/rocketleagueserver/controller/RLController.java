@@ -1,9 +1,11 @@
 package rocketleagueserver.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -85,11 +87,49 @@ public class RLController {
 	// Car
 	// All cars for ONE player
 	// READ / GET by player ID
-	// WILL NEED TO LOGIC THROUGH TIHS
+	// **MIGHT NEED TO LOGIC THROUGH TIHS
 	@GetMapping("/player/{playerId}/car")
 	public List<CarData> retrieveAllCars(){
 		log.info("Retrieving all cars in the specified player's garage.");
 		List<CarData> cars = playerService.retrieveAllCars();
 		return cars;
 	}
+	
+	// Car
+	// READ / GET Car by ID
+	@GetMapping("/player/{playerId}/car/{carId}")
+	public CarData retrieveCarById(@PathVariable Long carId) {
+		log.info("Retrieving player with ID: {}",carId);
+		CarData car = playerService.retrieveCarById(carId);
+		return car;
+	}
+	
+	// Car
+	// Update ONE car by ID for a specific player
+	@PutMapping("/player/{playerId}/car/{carId}") // the specific URL I'm using: /player/1/car/2
+	public CarData updateCar(@PathVariable Long playerId, @PathVariable Long carId,
+			@RequestBody CarData carData) {
+		carData.setCarId(carId);
+		log.info("Updating Car = {} for player with ID = {}", carId, playerId); // Output: Updating Car = 2 for player with ID = 1
+		return playerService.saveCar(playerId, carData); // changed carId to playerId
+		// when sending req, it's claiming that the playerId is the same as the carId = 2, playerId is 1
+	}
+	
+//	// Car
+//	// Remove ALL cars from an inventory -- this is not allowed
+//	@DeleteMapping()
+//	public void deleteAllCars("/player/{playerId}/car/{carId}") {
+//		
+//	}
+
+	// Car
+	// Remove ONE car by ID from inventory for a specific player
+	@DeleteMapping("/player/{playerId}/car/{carId}")
+	public Map<String, String> deleteCarById(@PathVariable Long playerId, @PathVariable Long carId){
+		log.info("Deleting car = {} for player with ID = {}", carId, playerId);
+		playerService.deleteCarById(carId);
+		
+		return Map.of("message", "Deleted car with ID = "+carId+ " succesfully.");
+	}
+	
 }
