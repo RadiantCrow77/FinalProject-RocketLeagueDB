@@ -264,5 +264,18 @@ public class PlayerService {
 		}
 		return rank;
 	}
+	
+	@Transactional(readOnly = true)
+	public List<RankEarnedData> retrieveAllRanks() {
+	List<RankEarned> ranks = rankEarnedDao.findAll();
+	
+	List<RankEarnedData> response = new LinkedList<>();
+	
+	for(RankEarned rank : ranks) {
+		response.add(new RankEarnedData(rank));
+	}
+	return response;
+	}
+
 
 }

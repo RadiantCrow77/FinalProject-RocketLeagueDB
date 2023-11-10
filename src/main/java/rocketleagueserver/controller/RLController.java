@@ -129,7 +129,7 @@ public class RLController {
 		log.info("Deleting car = {} for player with ID = {}", carId, playerId);
 		playerService.deleteCarById(carId);
 		
-		return Map.of("message", "Deleted car with ID = "+carId+ " succesfully.");
+		return Map.of("message", "Deleted car with ID = "+ carId + " succesfully.");
 	}
 	
 	// Ranks
@@ -143,4 +143,12 @@ public class RLController {
 		return playerService.saveRank(playerId, rankData);
 	}
 	
+	// Ranks
+	// Get ALL ranks earned by ONE player
+	@GetMapping("/player/{playerId}/rankEarned")
+	public List <RankEarnedData> retrieveRankById() {
+		log.info("Retrieving all ranks for specified player.");
+		List<RankEarnedData> ranks = playerService.retrieveAllRanks();
+		return ranks;
+	}
 }
