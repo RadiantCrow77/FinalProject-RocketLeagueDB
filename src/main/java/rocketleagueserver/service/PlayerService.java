@@ -277,5 +277,31 @@ public class PlayerService {
 	return response;
 	}
 
+	// trying to  fill up car_rank join table
+	// could insert into SQL and use ARC to see join table
+	// or create join with code
+	
+	// findCarById
+//		private Car findCarById(Long rankId, Long carId) {
+//			Car car = carDao.findById(carId).orElseThrow(
+//					() -> new NoSuchElementException("The Car with Id = " + carId + " was not found. "));
+//
+//			boolean storeFound = false;
+//
+//			// ... have to loop through petstore because it's a set
+//			for (PetStore petStore : car.getPetStores()) {
+//				if (petStore.getPetStoreId() == petStoreId) {
+//					storeFound = true;
+//					break;
+//				} else {
+//					if (!storeFound) {
+//						throw new IllegalStateException("Car with ID = " + carId
+//								+ " does not work at pet store containing ID = " + petStoreId);
+//					}
+//				}
+//
+//			}
+//			return car;
+//		}
 
 }

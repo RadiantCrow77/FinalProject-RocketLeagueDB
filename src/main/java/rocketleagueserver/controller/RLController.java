@@ -151,4 +151,5 @@ public class RLController {
 		List<RankEarnedData> ranks = playerService.retrieveAllRanks();
 		return ranks;
 	}
+	
 }
