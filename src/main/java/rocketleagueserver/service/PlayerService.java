@@ -153,11 +153,11 @@ public class PlayerService {
 		if (Objects.isNull(carId)) {
 			return new Car();
 		} else {
-			return findCarById(playerId, carId); // FIGURE THIS OUT NEXT, LOOKING AT CUSTOMER AS A REF***
+			return findPlayerCarById(playerId, carId); // FIGURE THIS OUT NEXT, LOOKING AT CUSTOMER AS A REF***
 		}
 	}
 
-	private Car findCarById(Long playerId, Long carId) {
+	private Car findPlayerCarById(Long playerId, Long carId) {
 		Car car = carDao.findById(carId)
 				.orElseThrow(() -> new NoSuchElementException("The car with Id = " + carId + " was not found."));
 
@@ -200,19 +200,19 @@ public class PlayerService {
 
 		carDao.delete(car);
 	}
-
-	public RankEarnedData saveRank(Long playerId, RankEarnedData rankData) {
+ // PLAYER STUFF
+	public RankEarnedData savePlayerRank(Long playerId, RankEarnedData rankData) {
 	Player player = findPlayerById(playerId);
 	
 	Long rankId = rankData.getRankId();
-	RankEarned rankEarned = findOrCreateRank(playerId, rankId);
+	RankEarned rankEarned = findOrCreatePlayerRank(playerId, rankId);
 
 	copyRankFields(rankEarned, rankData);
 //	findRankByPlayerId( playerId, rankId);
 	// ^ duplicate problem
 	
 	// set rank in car
-	rankEarned.setPlayer(player);
+//	rankEarned.setPlayer(player); // NOT SURE IF NEEDED
 
 
 	player.getRanksEarned().add(rankEarned);
@@ -223,15 +223,17 @@ public class PlayerService {
 	
 	}
 
-	private RankEarned findOrCreateRank(Long playerId, Long rankId) {
+	private RankEarned findOrCreatePlayerRank(Long playerId, Long rankId) {
+		RankEarned rankEarned;
 		if (Objects.isNull(rankId)) {
-			return new RankEarned();
+			rankEarned = new RankEarned();
 		} else {
-			return findRankById(playerId, rankId); // FIGURE THIS OUT NEXT, LOOKING AT CUSTOMER AS A REF***
+			rankEarned = findPlayerRankById(playerId, rankId); // FIGURE THIS OUT NEXT, LOOKING AT CUSTOMER AS A REF***
 		}
+		return rankEarned;
 	}
 
-	private RankEarned findRankById(Long playerId, Long rankId) {
+	private RankEarned findPlayerRankById(Long playerId, Long rankId) {
 		RankEarned rank = rankEarnedDao.findById(rankId)
 				.orElseThrow(() -> new NoSuchElementException("The rank with Id = " + rankId + " was not found."));
 
@@ -243,6 +245,52 @@ public class PlayerService {
 		return rank;
 	}
 
+	// CAR STUFF
+	@Transactional(readOnly=false)
+	public RankEarnedData saveCarRank(Long carId, RankEarnedData rankData) {
+	Car car = findCarById(carId);
+	Long rankId = rankData.getRankId();
+	RankEarned rankEarned = findOrCreateCarRank(carId, rankId);
+
+	copyRankFields(rankEarned, rankData);
+//	findRankByPlayerId( playerId, rankId);
+	// ^ duplicate problem
+	
+	// set rank in car
+	rankEarned.getCars().add(car);
+
+	car.getRanksEarned().add(rankEarned);
+
+	RankEarned dbRank = rankEarnedDao.save(rankEarned);
+
+	return new RankEarnedData(dbRank);
+	
+	}
+
+	private Car findCarById(Long carId) {
+		return carDao.findById(carId).orElseThrow(() -> new NoSuchElementException("The car with Id = " + carId + " was not found."));
+	}
+
+	private RankEarned findOrCreateCarRank(Long carId, Long rankId) {
+		if (Objects.isNull(rankId)) {
+			return new RankEarned();
+		} else {
+			return findCarRankById(carId, rankId); // FIGURE THIS OUT NEXT, LOOKING AT CUSTOMER AS A REF***
+		}
+	}
+
+	private RankEarned findCarRankById(Long carId, Long rankId) {
+		RankEarned rank = rankEarnedDao.findById(rankId)
+				.orElseThrow(() -> new NoSuchElementException("The car with Id = " + rankId + " was not found."));
+
+		// if car with Id is not found for that specific player, throw exception
+		if (rank.getPlayer().getPlayerId() != carId) {
+			throw new IllegalStateException(
+					"Rank with ID = " + rankId + " does not belong to player containing ID = " + carId);
+		}
+		return rank;
+	}
+	// END CAR STUFF
 	private void copyRankFields(RankEarned rank, RankEarnedData rankData) {
 	rank.setRankId(rankData.getRankId());
 	rank.setRankLevel(rankData.getRankLevel());
@@ -251,19 +299,19 @@ public class PlayerService {
 	// figuring out the duplicate problem:
 	// find rank by name
 	// compare to player rank lv
-	private RankEarned findRankByPlayerId(Long playerId, Long rankId) {
-//		RankEarned rank = rankEarnedDao.findById(rankId)
-//				.orElseThrow(() -> new NoSuchElementException("The rank with Id = " + rankId + " was not found."));
-		
-		RankEarned rank = new RankEarned();
-		
-		// if car with Id is not found for that specific player, throw exception
-		if (rank.getPlayer().getPlayerId() == rankId) {
-			throw new IllegalStateException(
-					"Player with ID = " + playerId + " already contains the rank with = " + rankId);
-		}
-		return rank;
-	}
+//	private RankEarned findRankByPlayerId(Long playerId, Long rankId) {
+////		RankEarned rank = rankEarnedDao.findById(rankId)
+////				.orElseThrow(() -> new NoSuchElementException("The rank with Id = " + rankId + " was not found."));
+//		
+//		RankEarned rank = new RankEarned();
+//		
+//		// if car with Id is not found for that specific player, throw exception
+//		if (rank.getPlayer().getPlayerId() == rankId) {
+//			throw new IllegalStateException(
+//					"Player with ID = " + playerId + " already contains the rank with = " + rankId);
+//		}
+//		return rank;
+//	}
 	
 	@Transactional(readOnly = true)
 	public List<RankEarnedData> retrieveAllRanks() {
@@ -281,14 +329,26 @@ public class PlayerService {
 	// could insert into SQL and use ARC to see join table
 	// or create join with code
 	
+	// PSEUDOCODE:
+	// 1 - see if player has rank for a car
+	
+	// 2 - see if rank level (string) already exists in rank tbl
+	// see if car (ID / pk) has rank AKA does rank level (string) already exist?
+		// yes - check if current car rank = new car rank
+			// fetch that ID # for bronze/silver etc (the highest rank lv)
+		// no - null = car rank? then take rank ID (pk) and all values assoc w/that rank ID
+
+		
+	
 	// findCarById
 //		private Car findCarById(Long rankId, Long carId) {
 //			Car car = carDao.findById(carId).orElseThrow(
 //					() -> new NoSuchElementException("The Car with Id = " + carId + " was not found. "));
 //
-//			boolean storeFound = false;
+//			boolean carFound = false;
 //
-//			// ... have to loop through petstore because it's a set
+//			// ... have to loop through player? because it's a set
+//				// ***copied this from petstore 
 //			for (PetStore petStore : car.getPetStores()) {
 //				if (petStore.getPetStoreId() == petStoreId) {
 //					storeFound = true;

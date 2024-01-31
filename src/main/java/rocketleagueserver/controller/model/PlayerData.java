@@ -21,8 +21,8 @@ public class PlayerData {
 	private String playerBorder;
 	private String playerAnthem;
 	
-	private Set<CarData> cars = new HashSet<>();
-	private Set<RankEarnedData> ranksEarned = new HashSet<>();
+	Set<CarData> cars = new HashSet<>();
+	Set<RankEarnedData> ranksEarned = new HashSet<>();
 	
 	// constructor, takes Player in as param, set all matching fields in PlayerData class
 	public PlayerData(Player player) {
@@ -35,13 +35,13 @@ public class PlayerData {
 		
 // for loop needed for "main" class
 		for(Car car: player.getCars()) {
-		 CarData carData = new CarData();
+		 CarData carData = new CarData(car);
 		 // *************** was = new CarData(car);
 		 cars.add(carData);
 		}
 		
 		for(RankEarned rankEarned: player.getRanksEarned()) {
-			RankEarnedData rankEarnedData = new RankEarnedData();
+			RankEarnedData rankEarnedData = new RankEarnedData(rankEarned);
 			ranksEarned.add(rankEarnedData);
 		}
 	}

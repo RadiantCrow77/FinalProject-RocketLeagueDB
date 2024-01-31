@@ -7,10 +7,10 @@ spring:
     # JPA properties
   jpa:
     hibernate: #takes entities and converts them to SQL statements
-      ddl-auto: update # CHANGE TO UPDATE AFTER ENTITIES ARE CORRECT
+      ddl-auto: update # CHANGE TO UPDATE AFTER ENTITIES ARE CORRECT > update otherwise
     show-sql: true
     defer-datasource-initialization: true #when spring boot is inserting into tables, spring boot can sometimes insert data before tables are created, this tells spring to wait
     
   sql:
     init:
-      mode: never
+      mode: never # never otherwise

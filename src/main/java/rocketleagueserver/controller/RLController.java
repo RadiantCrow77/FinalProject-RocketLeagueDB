@@ -135,21 +135,33 @@ public class RLController {
 	// Ranks
 	// Add ONE rank to ONE player
 	@PostMapping("/player/{playerId}/rankEarned")
-	public RankEarnedData addRank(
+	public RankEarnedData addPlayerRank(
 			@PathVariable Long playerId,
 			@RequestBody RankEarnedData rankData) {
 		log.info("Added a new rank: {} to specified player", rankData);
 		
-		return playerService.saveRank(playerId, rankData);
+		return playerService.savePlayerRank(playerId, rankData);
 	}
 	
 	// Ranks
 	// Get ALL ranks earned by ONE player
 	@GetMapping("/player/{playerId}/rankEarned")
-	public List <RankEarnedData> retrieveRankById() {
+	public List <RankEarnedData> retrievePlayerRankById() {
 		log.info("Retrieving all ranks for specified player.");
 		List<RankEarnedData> ranks = playerService.retrieveAllRanks();
 		return ranks;
 	}
+	
+	// Car Ranks
+	// GET ALL ranks earned by ONE car
+	@GetMapping("/car/{carId}/rankEarned")
+	public List <RankEarnedData> retrieveCarRankById() {
+		log.info("Retrieving all ranks for specified car.");
+		List<RankEarnedData> ranks = playerService.retrieveAllRanks();
+		return ranks;
+	}
+	
+	
+	
 	
 }
