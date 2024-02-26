@@ -153,7 +153,7 @@ public class RLController {
 	}
 	
 	// Car Ranks
-	// GET ALL ranks earned by ONE car
+	// GET current rank earned by ONE car
 	@GetMapping("/car/{carId}/rankEarned")
 	public List <RankEarnedData> retrieveCarRankById() {
 		log.info("Retrieving all ranks for specified car.");
@@ -161,6 +161,16 @@ public class RLController {
 		return ranks;
 	}
 	
+	// POST with carId and rankId
+	// handle duplicate key
+	@PostMapping("/car/{carId}/{rankId}")
+	public RankEarnedData addPlayerRank(
+			@PathVariable Long carId,
+			@PathVariable Long rankId) {
+		log.info("Added a new rank: {} to specified car: {}", rankId, carId);
+		
+		return playerService.saveCarRank(carId, rankId);
+	}
 	
 	
 	
