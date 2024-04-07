@@ -13,8 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import rocketleagueserver.controller.model.PlayerData;
 import rocketleagueserver.controller.model.PlayerData.CarData;
+import rocketleagueserver.controller.model.PlayerData.CarRankData;
 import rocketleagueserver.controller.model.PlayerData.RankEarnedData;
 import rocketleagueserver.dao.CarDao;
+import rocketleagueserver.dao.CarRankDao;
 import rocketleagueserver.dao.PlayerDao;
 import rocketleagueserver.dao.RankEarnedDao;
 import rocketleagueserver.entity.Car;
@@ -209,50 +211,49 @@ public class PlayerService {
 	}
 
 	// PLAYER STUFF
-	public RankEarnedData savePlayerRank(Long playerId, RankEarnedData rankData) {
-		Player player = findPlayerById(playerId);
-
-		Long rankId = rankData.getRankId();
-		RankEarned rankEarned = findOrCreatePlayerRank(playerId, rankId);
-
-		copyRankFields(rankEarned, rankData);
-//	findRankByPlayerId( playerId, rankId);
-		// ^ duplicate problem
-
-		// set rank in car
-//	rankEarned.setPlayer(player); // NOT SURE IF NEEDED
-
-		player.getRanksEarned().add(rankEarned);
-		rankEarned.setPlayer(player); // set player inside rank earned
-
-		RankEarned dbRank = rankEarnedDao.save(rankEarned);
-
-		return new RankEarnedData(dbRank);
-
-	}
+//	public RankEarnedData savePlayerRank(Long playerId, RankEarnedData rankData) {
+//		Player player = findPlayerById(playerId);
+//
+//		Long rankId = rankData.getRankId();
+//		RankEarned rankEarned = findOrCreatePlayerRank(playerId, rankId);
+//
+//		copyRankFields(rankEarned, rankData);
+////	findRankByPlayerId( playerId, rankId);
+//		// ^ duplicate problem
+//
+//		// set rank in car
+////	rankEarned.setPlayer(player); // NOT SURE IF NEEDED
+//
+//		player.getRanksEarned().add(rankEarned);
+//		rankEarned.setPlayer(player); // set player inside rank earned
+//
+//		RankEarned dbRank = rankEarnedDao.save(rankEarned);
+//
+//		return new RankEarnedData(dbRank);
+//
+//	}
 	// use petStoreServ as a benchmark, 
 	// customer <-> rankEarned
 	// petStore <-> player
-	private RankEarned findOrCreatePlayerRank(Long playerId, Long rankId) {
-		RankEarned rankEarned;
-		Player player = playerDao.findById(playerId)
-				.orElseThrow(() -> new NoSuchElementException("The player with Id = " + playerId + " was not found."));
-
-		if (Objects.isNull(rankId)) { // if player has no rank Id
-			rankEarned = new RankEarned(); // ... create one
-			// du start
+//	private RankEarned findOrCreatePlayerRank(Long playerId, Long rankId) {
+//		RankEarned rankEarned = new RankEarned();
+//		Player player = playerDao.findById(playerId)
+//				.orElseThrow(() -> new NoSuchElementException("The player with Id = " + playerId + " was not found."));
+//		
+//		// if player has no rank Id, create one:
+//		
+//
+//			for(RankEarned rank: player.getRanksEarned()) {
+//			if (rank.getRankId() == rankId) {
+//				throw new DuplicateKeyException(
+//						"Player with ID = " + playerId + " already contains that rank. Only new ranks can be added.");
+//			} // du end
+////		} else {
+//			//rankEarned = findPlayerRankById(playerId, rankId);//
+//			}
+//			return rankEarned;
+//		}
 		
-			for(RankEarned rankEarned: player.getRanksEarned()) {
-			if (rankEarned.getRankId() == player.getRanksEarned()) {
-				throw new DuplicateKeyException(
-						"Player with ID = " + playerId + " already contains that rank. Only new ranks can be added.");
-			} // du end
-//		} else {
-			//rankEarned = findPlayerRankById(playerId, rankId);//
-			}
-		}
-		return rankEarned;
-	}
 
 //	// NEW** Duplicate error handler - handles if a player already has specific rank **NOT WORKING
 //	if(rank != null) { //  if rank already exists ..
@@ -260,25 +261,28 @@ public class PlayerService {
 //		
 //	}
 
-	private RankEarned findPlayerRankById(Long playerId, Long rankId) {
-		RankEarned rank = rankEarnedDao.findById(rankId)
-				.orElseThrow(() -> new NoSuchElementException("The rank with Id = " + rankId + " was not found."));
-
-		// if car with Id is not found for that specific player, throw exception
-		if (rank.getPlayer().getPlayerId() != playerId) {
-			throw new IllegalStateException(
-					"Rank with ID = " + rankId + " does not belong to player containing ID = " + playerId);
-		}
-
-		return rank;
-	}
+//	private RankEarned findPlayerRankById(Long playerId, Long rankId) {
+//		RankEarned rank = rankEarnedDao.findById(rankId)
+//				.orElseThrow(() -> new NoSuchElementException("The rank with Id = " + rankId + " was not found."));
+//
+//		// if car with Id is not found for that specific player, throw exception
+//		if (rank.getPlayer().getPlayerId() != playerId) {
+//			throw new IllegalStateException(
+//					"Rank with ID = " + rankId + " does not belong to player containing ID = " + playerId);
+//		}
+//
+//		return rank;
+//	}
 
 	// CAR STUFF
 	@Transactional(readOnly = false)
-	public RankEarnedData saveCarRank(Long carId, Long rankId) {
+	public RankEarnedData saveCarRank(Long carId, RankEarnedData rankData) { // ** 4/6: changed Long rankId --> RankEarnedData rankData -- > changed back
 		Car car = findCarById(carId);
+		Long rankId = rankData.getRankId(); // ** 4/6 added line
+		
+		
 
-		RankEarned rankEarned = findRankById(rankId);
+		RankEarned rankEarned = findRankById(rankId); // ** 4/6 changed rankData to rankId
 
 //	findRankByPlayerId( playerId, rankId);
 		// ^ duplicate problem
@@ -299,7 +303,7 @@ public class PlayerService {
 				.orElseThrow(() -> new NoSuchElementException("The car with Id = " + carId + " was not found."));
 	}
 
-	private RankEarned findRankById(Long rankId) {
+	private RankEarned findRankById(Long rankId) {  // ** 4/6: changed Long rankId --> RankEarnedData rankData -- > changed back 
 		return rankEarnedDao.findById(rankId)
 				.orElseThrow(() -> new NoSuchElementException("The rank with Id = " + rankId + " was not found."));
 	}
@@ -324,7 +328,9 @@ public class PlayerService {
 
 			}
 		}
-
+		
+		//4/6 ** ^^^ make somethign similar to this to implement get rank by car Id 
+		
 		if (!found) {
 			throw new IllegalArgumentException(
 					"Rank with ID = " + rankId + " does not belong to car containing ID = " + carId);
@@ -356,6 +362,7 @@ public class PlayerService {
 //		return rank;
 //	}
 
+	// all Possible Ranks
 	@Transactional(readOnly = true)
 	public List<RankEarnedData> retrieveAllRanks() {
 		List<RankEarned> ranks = rankEarnedDao.findAll();
@@ -367,6 +374,32 @@ public class PlayerService {
 		}
 		return response;
 	}
+	
+	
+	//stuff for car rank
+//	****************************************************************************************
+	// *** 4/6 *** NOT WORKING *********, need for GET op for car ranks
+	// get ALL ranks by car ID
+//	@Transactional(readOnly = true)
+//	public List<CarRankData> retrieveAllCarRanks(Long carId, Long rankId){
+//		List<CarRankData> // ***
+//		
+//		// copied finCarRankById from here down vvvv
+//	
+//		RankEarned rank = rankEarnedDao.findById(rankId)
+//				.orElseThrow(() -> new NoSuchElementException("The rank with Id = " + rankId + " was not found."));
+//
+//		boolean found = false;
+//		for (Car car : rank.getCars()) {
+//			if (car.getCarId() == carId) {
+//				found = true;
+//				break;
+//
+//			}
+//		}
+//		
+//	return new CarRankData(findCarById(carId));
+//	}
 
 	// trying to fill up car_rank join table
 	// could insert into SQL and use ARC to see join table

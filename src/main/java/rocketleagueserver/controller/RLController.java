@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import rocketleagueserver.controller.model.PlayerData;
 import rocketleagueserver.controller.model.PlayerData.CarData;
+import rocketleagueserver.controller.model.PlayerData.CarRankData;
 import rocketleagueserver.controller.model.PlayerData.RankEarnedData;
 import rocketleagueserver.entity.Car;
 import rocketleagueserver.service.PlayerService;
@@ -115,8 +117,18 @@ public class RLController {
 		// when sending req, it's claiming that the playerId is the same as the carId = 2, playerId is 1
 	}
 	
+	// copy/paste
+	@PatchMapping("/player/{playerId}/car/{carId}") // the specific URL I'm using: /player/1/car/2
+	public CarData patchCar(@PathVariable Long playerId, @PathVariable Long carId,
+			@RequestBody CarData carData) {
+		carData.setCarId(carId);
+		log.info("Updating Car = {} for player with ID = {}", carId, playerId); // Output: Updating Car = 2 for player with ID = 1
+		return playerService.saveCar(playerId, carData); // changed carId to playerId
+		// when sending req, it's claiming that the playerId is the same as the carId = 2, playerId is 1
+	}
+	
 //	// Car
-//	// Remove ALL cars from an inventory -- this is not allowed
+//	// Remove ALL cars from an inventory -- this is not allowed, Leave in for explanation
 //	@DeleteMapping()
 //	public void deleteAllCars("/player/{playerId}/car/{carId}") {
 //		
@@ -132,44 +144,67 @@ public class RLController {
 		return Map.of("message", "Deleted car with ID = "+ carId + " succesfully.");
 	}
 	
+	//Ranks
+	// Add ONE rank to ONE car
+//		@PostMapping("/player/{playerId}/car/{carId}/rankEarned")
+//		public RankEarnedData addCarRank(
+//				@PathVariable Long carId,
+//				@RequestBody Long rankId) {
+//			log.info("Added a new rank: {} to specified car", rankId);
+//			
+//			return playerService.saveCarRank(carId, rankId);
+//		}
+	
 	// Ranks
 	// Add ONE rank to ONE player
-	@PostMapping("/player/{playerId}/rankEarned")
-	public RankEarnedData addPlayerRank(
-			@PathVariable Long playerId,
-			@RequestBody RankEarnedData rankData) {
-		log.info("Added a new rank: {} to specified player", rankData);
-		
-		return playerService.savePlayerRank(playerId, rankData);
-	}
+//	@PostMapping("/player/{playerId}/rankEarned")
+//	public RankEarnedData addPlayerRank(
+//			@PathVariable Long playerId,
+//			@RequestBody RankEarnedData rankData) {
+//		log.info("Added a new rank: {} to specified player", rankData);
+//		
+//		return playerService.savePlayerRank(playerId, rankData);
+//	}
 	
 	// Ranks
-	// Get ALL ranks earned by ONE player
-	@GetMapping("/player/{playerId}/rankEarned")
-	public List <RankEarnedData> retrievePlayerRankById() {
-		log.info("Retrieving all ranks for specified player.");
+	// Get ALL ranks possible
+	@GetMapping("/rank")
+	public List <RankEarnedData> retrieveAllRanks(){ //retrieveAllRanks
+		log.info("Retrieving all possible ranks.");
 		List<RankEarnedData> ranks = playerService.retrieveAllRanks();
 		return ranks;
 	}
 	
+	// using vvv for this ^
+	// Get ALL ranks earned by ONE player
+//	@GetMapping("/player/{playerId}/rankEarned")
+//	public List <RankEarnedData> retrievePlayerRankById() {
+//		log.info("Retrieving all ranks for specified player.");
+//		List<RankEarnedData> ranks = playerService.retrieveAllRanks();
+//		return ranks;
+//	}
+	
 	// Car Ranks
-	// GET current rank earned by ONE car
-	@GetMapping("/car/{carId}/rankEarned")
-	public List <RankEarnedData> retrieveCarRankById() {
-		log.info("Retrieving all ranks for specified car.");
-		List<RankEarnedData> ranks = playerService.retrieveAllRanks();
-		return ranks;
-	}
+	
+	//Read operation for the many to many table
+//	****************************************************************************************
+	// GET all ranks earned by ONE car
+//	@GetMapping("/car/{carId}/rankEarned")
+//	public List <CarRankData> retrieveCarRankById(@PathVariable Long carId, Long rankId) { // *** 4/6 added rankId
+//		log.info("Retrieving all ranks for specified car.");
+//		List<CarRankData> ranks = playerService.retrieveAllCarRanks(carId, rankId); // *** 4/6:  findCarRankById ??? changed playerService.retrieveAllRanks -- > 
+//		return ranks;
+//	}
 	
 	// POST with carId and rankId
 	// handle duplicate key
-	@PostMapping("/car/{carId}/{rankId}")
+	@PostMapping("/car/{carId}/rankEarned") // *** 4/6: changed /car/{carId}/{rankId} to ../rankEarned
 	public RankEarnedData addPlayerRank(
 			@PathVariable Long carId,
-			@PathVariable Long rankId) {
-		log.info("Added a new rank: {} to specified car: {}", rankId, carId);
+			@RequestBody RankEarnedData rankData) { // *** 4/6: changed Long rankData --> RankEarnedData rankData
+		log.info("Added a new rank to car with ID = {}", carId); 
 		
-		return playerService.saveCarRank(carId, rankId);
+		return playerService.saveCarRank(carId, rankData);
 	}
 	
 	

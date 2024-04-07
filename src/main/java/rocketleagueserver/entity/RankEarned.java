@@ -31,11 +31,11 @@ public class RankEarned {
 	
 // Relation between ranksEarned and players
 // Use Join Column a.k.a. FK = playerId to build Entity relationship (1-Many; from the perspective of Players)
-	@EqualsAndHashCode.Exclude
-	@ToString.Exclude
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "player_id")
-	private Player player;
+//	@EqualsAndHashCode.Exclude
+//	@ToString.Exclude
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "player_id")
+//	private Player player;
 	
 
 // Relation between cars and ranksEarned, NOT SURE IF CORRECT

@@ -40,10 +40,10 @@ public class PlayerData {
 		 cars.add(carData);
 		}
 		
-		for(RankEarned rankEarned: player.getRanksEarned()) {
-			RankEarnedData rankEarnedData = new RankEarnedData(rankEarned);
-			ranksEarned.add(rankEarnedData);
-		}
+//		for(RankEarned rankEarned: player.getRanksEarned()) {
+//			RankEarnedData rankEarnedData = new RankEarnedData(rankEarned);
+//			ranksEarned.add(rankEarnedData);
+//		}
 	}
 	
 	// Inner Classes for other entities
@@ -74,7 +74,7 @@ public class PlayerData {
 	public static class RankEarnedData{
 		private Long rankId; 
 		// ****took final off to fix NoArgsConstruct err
-			private String rankLevel;
+			public String rankLevel;
 //			BRONZE;
 //			private String SILVER;
 //			private String GOLD;
@@ -88,8 +88,24 @@ public class PlayerData {
 //				SILVER = rankEarned.getSILVER();
 //				GOLD = rankEarned.getGOLD();
 //				PLATINUM = rankEarned.getPLATINUM();
-			}
+			}		
 	}
-
+	
+	
+	// Car Ranks Class, not sure if correct***
+	@Data
+	@NoArgsConstructor
+	public static class CarRankData{
+		private long rankId;
+		private long carId;
+		
+		// constructor + getters
+		public CarRankData(CarRankData carRankData) {
+			// create 
+			carId = carRankData.getCarId();
+			rankId = carRankData.getRankId();
+			
+		}
+	}
 
 } // end player class

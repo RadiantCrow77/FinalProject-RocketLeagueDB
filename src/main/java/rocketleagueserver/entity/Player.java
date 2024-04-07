@@ -38,11 +38,11 @@ public class Player {
 	private Set<Car> cars = new HashSet<>();
 	
 	// set relationship w/ranks_earned, 1-many
-	@EqualsAndHashCode.Exclude
-	@ToString.Exclude
-	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true) // same
-	@Column(unique = true) // make sure no duplicate ranks
-	private Set<RankEarned> ranksEarned = new HashSet<>();
+//	@EqualsAndHashCode.Exclude
+//	@ToString.Exclude
+//	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true) // same
+//	@Column(unique = true) // make sure no duplicate ranks
+//	private Set<RankEarned> ranksEarned = new HashSet<>();
 
 }
 
