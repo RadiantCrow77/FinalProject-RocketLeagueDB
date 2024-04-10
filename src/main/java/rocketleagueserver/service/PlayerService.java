@@ -13,10 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import rocketleagueserver.controller.model.PlayerData;
 import rocketleagueserver.controller.model.PlayerData.CarData;
-import rocketleagueserver.controller.model.PlayerData.CarRankData;
 import rocketleagueserver.controller.model.PlayerData.RankEarnedData;
 import rocketleagueserver.dao.CarDao;
-import rocketleagueserver.dao.CarRankDao;
 import rocketleagueserver.dao.PlayerDao;
 import rocketleagueserver.dao.RankEarnedDao;
 import rocketleagueserver.entity.Car;
@@ -376,7 +374,7 @@ public class PlayerService {
 	}
 	
 	
-	//stuff for car rank
+	// Car Rank
 //	****************************************************************************************
 	// *** 4/6 *** NOT WORKING *********, need for GET op for car ranks
 	// get ALL ranks by car ID
@@ -401,19 +399,6 @@ public class PlayerService {
 //	return new CarRankData(findCarById(carId));
 //	}
 
-	// trying to fill up car_rank join table
-	// could insert into SQL and use ARC to see join table
-	// or create join with code
-
-	// PSEUDOCODE:
-	// 1 - see if player has rank for a car
-
-	// 2 - see if rank level (string) already exists in rank tbl
-	// see if car (ID / pk) has rank AKA does rank level (string) already exist?
-	// yes - check if current car rank = new car rank
-	// fetch that ID # for bronze/silver etc (the highest rank lv)
-	// no - null = car rank? then take rank ID (pk) and all values assoc w/that rank
-	// ID
 
 	// findCarById
 //		private Car findCarById(Long rankId, Long carId) {

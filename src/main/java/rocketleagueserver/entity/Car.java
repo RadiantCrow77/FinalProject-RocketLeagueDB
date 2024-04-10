@@ -47,18 +47,6 @@ public class Car {
 	@JoinTable(name = "car_rank", joinColumns = @JoinColumn(name = "car_id"), inverseJoinColumns = @JoinColumn(name = "rank_id"))
 	@Column(unique = true) // make sure no duplicate ranks
     private Set<RankEarned> ranksEarned = new HashSet<>();
-	
-	// for reference:
-//	private Set<Customer> customers = new HashSet<>();
-	
-//	//  set employee annotations and relationship
-//	@EqualsAndHashCode.Exclude
-//	@ToString.Exclude
-//	@OneToMany(mappedBy = "petStore", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private Set<Employee> employees = new HashSet<>();
-	
-//	@ManyToMany(cascade = CascadeType.PERSIST)
-//	@JoinTable(name = "pet_store_customer", joinColumns = @JoinColumn(name = "pet_store_id"), inverseJoinColumns = @JoinColumn(name = "customer_id"))
-//	private Set<Customer> customers = new HashSet<>();
+
 	
 }

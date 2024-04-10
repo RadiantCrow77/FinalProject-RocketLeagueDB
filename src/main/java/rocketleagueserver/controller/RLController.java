@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import rocketleagueserver.controller.model.PlayerData;
 import rocketleagueserver.controller.model.PlayerData.CarData;
-import rocketleagueserver.controller.model.PlayerData.CarRankData;
 import rocketleagueserver.controller.model.PlayerData.RankEarnedData;
-import rocketleagueserver.entity.Car;
 import rocketleagueserver.service.PlayerService;
 
 @RestController
@@ -175,7 +173,6 @@ public class RLController {
 		return ranks;
 	}
 	
-	// using vvv for this ^
 	// Get ALL ranks earned by ONE player
 //	@GetMapping("/player/{playerId}/rankEarned")
 //	public List <RankEarnedData> retrievePlayerRankById() {
